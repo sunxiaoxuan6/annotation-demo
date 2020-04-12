@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="generate.MessageDao">
+  <resultMap id="BaseResultMap" type="generate.Message">
+    <id column="msg_id" jdbcType="INTEGER" property="msgId" />
+    <result column="msg_text" jdbcType="VARCHAR" property="msgText" />
+    <result column="msg_summary" jdbcType="VARCHAR" property="msgSummary" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    msg_id, msg_text, msg_summary
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from message
+    where msg_id = #{msgId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from message
+    where msg_id = #{msgId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="msg_id" keyProperty="msgId" parameterType="generate.Message" useGeneratedKeys="true">
+    insert into message (msg_text, msg_summary)
+    values (#{msgText,jdbcType=VARCHAR}, #{msgSummary,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="msg_id" keyProperty="msgId" parameterType="generate.Message" useGeneratedKeys="true">
+    insert into message
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="msgText != null">
+        msg_text,
+      </if>
+      <if test="msgSummary != null">
+        msg_summary,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="msgText != null">
+        #{msgText,jdbcType=VARCHAR},
+      </if>
+      <if test="msgSummary != null">
+        #{msgSummary,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="generate.Message">
+    update message
+    <set>
+      <if test="msgText != null">
+        msg_text = #{msgText,jdbcType=VARCHAR},
+      </if>
+      <if test="msgSummary != null">
+        msg_summary = #{msgSummary,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where msg_id = #{msgId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="generate.Message">
+    update message
+    set msg_text = #{msgText,jdbcType=VARCHAR},
+      msg_summary = #{msgSummary,jdbcType=VARCHAR}
+    where msg_id = #{msgId,jdbcType=INTEGER}
+  </update>
+</mapper>
